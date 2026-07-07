@@ -5,3 +5,13 @@ body {
     justify-content: center;
     gap: 8px;
 }
+
+table {
+    border: 2px solid blue;
+}
+
+.weather-form, .weather-form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
