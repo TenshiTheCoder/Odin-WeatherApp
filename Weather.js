@@ -3,6 +3,7 @@ const weatherDiv = document.querySelector(".weather-display");
 const weatherSearch = document.querySelector("#weather-search");
 const searchBtn = document.querySelector("#search-btn");
 const formBtn = document.querySelector("#form-btn");
+const displayBtns = document.querySelector(".change-display");
 
 const weatherDataStore = {};
 let locationSelector;
@@ -187,15 +188,24 @@ function showWeatherForm() {
         locationContainer.append(newInput);
     })
 
+    const dateOneLabel = document.createElement("label");
+    dateOneLabel.htmlFor = "date-one"
+    dateOneLabel.textContent = "Start Date: "
+
     const dateOneInput = document.createElement("input");
     dateOneInput.id = "date-one";
     dateOneInput.type ="date";
+
+    const dateTwoLabel = document.createElement("label");
+    dateTwoLabel.htmlFor = "date-two";
+    dateTwoLabel.textContent = "End Date: "
 
     const dateTwoInput = document.createElement("input");
     dateTwoInput.id = "date-two";
     dateTwoInput.type ="date";
 
     const degreeSelect = document.createElement("select");
+    degreeSelect.id = "degree-select";
 
     const fahrenheitOption = document.createElement("option");
     fahrenheitOption.value = "us";
@@ -224,7 +234,9 @@ function showWeatherForm() {
     weatherForm.append(
         locationContainer,
         addFieldBtn,
+        dateOneLabel,
         dateOneInput,
+        dateTwoLabel,
         dateTwoInput,
         degreeSelect,
         submitBtn,
@@ -302,7 +314,7 @@ function createLocationDropdown() {
         displayWeather(weatherDataStore[selectedLocation]);
     });
 
-    document.body.appendChild(locationSelector);
+    displayBtns.appendChild(locationSelector);
 }
 
 function createUnitSelect(){
@@ -338,5 +350,5 @@ function createUnitSelect(){
     }
 });
 
-    document.body.appendChild(unitSelect);
+    displayBtns.appendChild(unitSelect);
 }
