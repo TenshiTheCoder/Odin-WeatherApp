@@ -3,14 +3,16 @@ const weatherDiv = document.querySelector(".weather-display");
 const weatherSearch = document.querySelector("#weather-search");
 const searchBtn = document.querySelector("#search-btn");
 const formBtn = document.querySelector("#form-btn");
+const resetBtn = document.querySelector(".reset-btn");
 const displayBtns = document.querySelector(".change-display");
+const basicUnit = document.querySelector(".basic-unit");
 
 const weatherDataStore = {};
 let locationSelector;
 let currentDateOne = "";
 let currentDateTwo = "";
 
-async function retrieveWeather(location, dateOne, dateTwo, unit) {
+async function retrieveWeather(location, dateOne, dateTwo, unit = "us") {
     try {
         let baseURL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}`;
         if (dateOne && dateTwo) {
@@ -49,6 +51,11 @@ function displayWeather(data, unit) {
 
     const addressName = document.createElement("h2");
     addressName.classList.add("address-name");
+    if(!data) {
+        weatherDiv.textContent = "Weather data could not be retrieved";
+        return;
+    }
+    weatherDiv.innerHTML = "";
     addressName.textContent = `Displaying weather for: ${data.address}`;
     weatherDiv.append(addressName);
 
@@ -146,11 +153,20 @@ function displayWeather(data, unit) {
 
 searchBtn.addEventListener("click", (e) => {
     e.preventDefault();
+
     const location = weatherSearch.value;
-    retrieveWeather(location)
-        .then(data => displayWeather(data));
+    const unit = basicUnit.value;
+    console.log(basicUnit.value);
+
+    retrieveWeather(location, "", "", unit)
+        .then(data => {
+            if (data) {
+                displayWeather(data, unit);
+            }
+        });
+
     weatherSearch.value = "";
-})
+});
 
 function showWeatherForm() {
     let inputCount = 1;
@@ -319,6 +335,7 @@ function createLocationDropdown() {
 
 function createUnitSelect(){
     const unitSelect = document.createElement("select");
+    unitSelect.classList.add("unit-select");
     
     const metricOption = document.createElement("option");
     metricOption.value = "metric";
@@ -352,3 +369,17 @@ function createUnitSelect(){
 
     displayBtns.appendChild(unitSelect);
 }
+
+function resetWeather() {
+    Object.keys(weatherDataStore).forEach(key => {
+        delete weatherDataStore[key];
+    });
+
+    weatherDiv.innerHTML = "";
+    displayBtns.innerHTML = "";
+    
+    currentDateOne = "";
+    currentDateTwo = "";
+}
+
+resetBtn.addEventListener("click", resetWeather);
